@@ -1,6 +1,5 @@
-
 var config = {
-  port: 6000,
+  port: 5000,
   mongodb: "mongodb://localhost/queuing",
   redis: {
     port: 6379,

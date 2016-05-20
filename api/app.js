@@ -3,24 +3,21 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
-//const middlewares = require('./middlewares');
-//const router = require('./config/router');
+const controllers = require('./controllers');
+const middlewares = require('./middlewares');
+const HttpError = require('./common/http-error');
 
-//app.use(middlewares.responseJson);
+app.use(middlewares.response);
 app.listen(config.port);
 app.use(bodyParser.json());
-
-//router(app);
-app.use((req, res) => {
-  res.json({test:[1,2,3,4]});
-})
-
-//app.use(middlewares.errorHandling);
 app.set('json spaces', 4);
+
+app.use(controllers);
+app.use(() => {throw new HttpError.NotFoundError()});
+app.use(middlewares.errorHandling);
 
 if ('development' == process.env.NODE_ENV) {
   app.set('showStackError', true);
-  mongoose.set('debug', true);
 }
 console.log('APP started on  port ' + config.port);
 module.exports = app;
