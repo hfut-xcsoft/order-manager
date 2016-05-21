@@ -1,0 +1,8 @@
+<ul>
+  <li ng-repeat="item in navItems">
+    <a href="{{item.url}}" class="{{item.active ? 'active' : ''}}">
+      <span class="menu-icon icon-{{item.code}}"></span>
+      <span class="text">{{item.name}}</span>
+    </a>
+  </li>
+</ul>

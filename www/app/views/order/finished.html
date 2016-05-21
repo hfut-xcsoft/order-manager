@@ -1,0 +1,37 @@
+<div>
+  <div class="page-header">
+    <ul class="nav-path">
+      <li>订单管理</li>
+      <li>已完成订单</li>
+    </ul>
+    <a href="#/orders/current" class="btn btn-blue ml-20">返回</a>
+  </div>
+  <div class="mg-20"></div>
+  <div class="card">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>订单序号</th>
+        <th>排号</th>
+        <th>商品</th>
+        <th class="tb-right">订单总价</th>
+        <th>完成时间</th>
+        <th>处理时间</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="order in vm.finishedOrder">
+        <td>{{$index + 1}}</td>
+        <td>{{order.number}}</td>
+        <td>{{order.items | itemsToString}}</td>
+        <td class="tb-right">¥{{order.total_price}}.00</td>
+        <td>{{order.finished_at | date: 'yyyy-MM-dd HH:mm'}}</td>
+        <td>{{order.finished_at - order.created_at}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+

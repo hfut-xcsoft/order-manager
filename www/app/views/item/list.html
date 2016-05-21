@@ -1,0 +1,36 @@
+<div>
+  <div class="page-header">
+    <ul class="nav-path">
+      <li>商品管理</li>
+      <li>商品列表</li>
+    </ul>
+    <a href="#/items/new" class="btn btn-blue right">添加商品</a>
+  </div>
+  <div class="mg-20"></div>
+  <div class="card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>商品名称</th>
+          <th class="tb-right">商品销量</th>
+          <th class="tb-right">订单单价</th>
+          <th class="tb-right">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in vm.items">
+          <td>{{$index + 1}}</td>
+          <td>{{item.name}}</td>
+          <td class="tb-right">{{item.sales_count}}</td>
+          <td class="tb-right">¥{{item.price}}.00</td>
+          <td class="tb-right">
+            <button class="btn btn-red" ng-click="vm.removeItem($index)">删除</button>
+            <a href="#/items/{{item._id}}" class="btn btn-yellow">修改</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
