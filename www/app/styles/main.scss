@@ -1,6 +1,16 @@
 // bower:scss
 // endbower
 
+$colors: (
+  "blue": #42a5f5,
+  "yellow": #ffca28,
+  "red": #ef5350,
+  "green": #66bb6a,
+  "orange": #fb8c00,
+  "grey": #bdbdbd,
+  "cyan": #00acc1
+);
+
 html,
 body {
   margin: 0;
@@ -221,14 +231,6 @@ body {
   }
 }
 
-$colors: (
-  "blue": #42a5f5,
-  "yellow": #ffca28,
-  "red": #ef5350,
-  "green": #66bb6a,
-  "orange": #fb8c00,
-  "grey": #bdbdbd
-);
 
 @each $name, $color in $colors {
   &.#{$name} {
@@ -255,7 +257,8 @@ a.btn {
       &:hover {
         background-color: lighten($color, 10%);
       }
-      &:active {
+      &:active,
+      &.active {
         background-color: darken($color, 15%);
       }
     }

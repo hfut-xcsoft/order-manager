@@ -26,7 +26,7 @@
           <td>{{order.number}}</td>
           <td order-state="order.status"></td>
           <td>{{order.items | itemsToString}}</td>
-          <td class="tb-right">¥{{order.total_price}}.00</td>
+          <td class="tb-right">{{order.total_price | rmb}}</td>
           <td class="tb-right" order-action-button="order.status"></td>
         </tr>
       </tbody>

@@ -1,0 +1,14 @@
+<div>
+  <div class="page-header">
+    <ul class="nav-path">
+      <li>数据统计</li>
+    </ul>
+    <span class="right">
+      <button ng-repeat="view in vm.views" class="btn btn-cyan" ng-click="vm.changeView($index)" ng-class="{active: vm.view === $index}">{{view}}</button>
+    </span>
+  </div>
+  <div class="mg-20"></div>
+  <div class="card">
+    <canvas chart></canvas>
+  </div>
+</div>

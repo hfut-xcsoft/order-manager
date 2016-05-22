@@ -30,7 +30,6 @@ angular.module('app').directive('navigation', function ($compile) {
         }
       ];
       $rootScope.$on('$routerChanged', function (event, current) {
-        console.log(current);
         var i;
         var items = $scope.navItems;
         for (i = 0; i < items.length; i++) {

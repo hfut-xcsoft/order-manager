@@ -64,14 +64,32 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
     title: '已完成订单'
   });
 
+  $stateProvider.state('product', {
+    url: '/product',
+    templateUrl: 'views/product/list.html',
+    controller: 'ProductController',
+    controllerAs: 'vm',
+    title: '生产管理'
+  });
+
+  $stateProvider.state('statistic', {
+    url: '/statistic',
+    templateUrl: 'views/statistic/chart.html',
+    controller: 'StatisticController',
+    controllerAs: 'vm',
+    title: '数据统计'
+  });
+
   $stateProvider.state('404', {
     url: '/404',
     templateUrl: 'views/404.html'
   });
 
+  $urlRouterProvider.when('', '/orders/current');
   $urlRouterProvider.otherwise('/404');
 }).run(function ($window, $document, $rootScope) {
   $rootScope.$on('$stateChangeSuccess', function (event, current) {
+    $rootScope.title = current.title + ' | 订单管理系统';
     $rootScope.$broadcast('$routerChanged', current);
   })
 });

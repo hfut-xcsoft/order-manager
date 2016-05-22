@@ -1,8 +1,8 @@
 <!doctype html>
-<html>
+<html ng-app="app">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title ng-bind="title"></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="app">
+  <body>
     <div class="container">
       <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -44,6 +44,7 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/simple-ajax-uploader/SimpleAjaxUploader.js"></script>
+    <script src="bower_components/Chart.js/dist/Chart.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -53,10 +54,15 @@
         <script src="scripts/directives/navigation.js"></script>
         <script src="scripts/controllers/itemList.js"></script>
         <script src="scripts/controllers/itemNew.js"></script>
+        <script src="scripts/controllers/product.js"></script>
         <script src="scripts/controllers/orderListCurrent.js"></script>
         <script src="scripts/controllers/orderListFinished.js"></script>
+        <script src="scripts/controllers/statistic.js"></script>
         <script src="scripts/directives/order.js"></script>
+        <script src="scripts/directives/product.js"></script>
+        <script src="scripts/directives/chart.js"></script>
         <script src="scripts/filters/order.js"></script>
+        <script src="scripts/filters/common.js"></script>
         <!-- endbuild -->
 </body>
 </html>

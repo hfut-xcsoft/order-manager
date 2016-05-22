@@ -23,7 +23,7 @@
           <td>{{$index + 1}}</td>
           <td>{{item.name}}</td>
           <td class="tb-right">{{item.sales_count}}</td>
-          <td class="tb-right">¥{{item.price}}.00</td>
+          <td class="tb-right">{{item.price | rmb}}</td>
           <td class="tb-right">
             <button class="btn btn-red" ng-click="vm.removeItem($index)">删除</button>
             <a href="#/items/{{item._id}}" class="btn btn-yellow">修改</a>
