@@ -63,6 +63,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
     controllerAs: 'vm',
     title: '已完成订单'
   });
+  $stateProvider.state('orders.new', {
+    url: '/new',
+    templateUrl: 'views/order/edit.html',
+    controller: 'OrderNewController',
+    controllerAs: 'vm',
+    title: '新订单'
+  });
 
   $stateProvider.state('product', {
     url: '/product',
