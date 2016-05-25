@@ -46,7 +46,7 @@ itemController.newItem = (req, res, next) => {
     price: body.price
   });
   _item.save().then(item => {
-    res.success(item);
+    res.success(item, 201);
   }).catch(next);
 };
 
@@ -56,14 +56,32 @@ itemController.newItem = (req, res, next) => {
  * @Router: /items/:itemId
  */
 itemController.getItem = (req, res, next) => {
-  //
+  const itemId = req.params.itemId;
+  Item.findById(itemId).then(item => {
+    res.success(item, 200);
+  }).catch(next);
 };
 
 itemController.updateItem = (req, res, next) => {
-  //
+  const body = req.body;
+  if(!body.name || !body.picture_url || !body.price) {
+    throw new HttpError.BadRequestError();
+  }
+  const itemId = req.params.itemId;
+  Item.findById(itemId).then(item => {
+    item.name = body.name;
+    item.picture_url = body.picture_url;
+    item.price = body.price;
+    item.save().then(item => {
+      res.success(item, 201);
+    });
+  }).catch(next);
 };
 
 itemController.removeItem = (req, res, next) => {
-  //
+    const itemId = req.params.itemId;
+    Item.remove({'_id': itemId}).then(() => {
+      res.success({}, 204);
+    })
 };
 module.exports = itemController;
