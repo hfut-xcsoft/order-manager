@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const itemController = require('./item');
-const orderController = require('./order');
-const statisticController = require('./statistic');
+//const orderController = require('./order');
+//const statisticController = require('./statistic');
 
 router.route('/items')
   .get(itemController.getItems)

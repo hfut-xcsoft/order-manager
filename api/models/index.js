@@ -5,5 +5,5 @@ if ('production' !== process.env.NODE_ENV) {
   mongoose.set('debug', true);
 }
 exports.Item = require('./item');
-exports.Order = require('./Order');
-exports.Static = require('./Statistic');
+//exports.Order = require('./Order');
+//exports.Static = require('./Statistic');
