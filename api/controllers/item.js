@@ -1,8 +1,16 @@
 const Item = require('../models').Item;
 const HttpError = require('../common/http-error');
+const utils = require('../common/utils');
 
 const itemController = {};
 
+itemController.errorHandling = (req, res, next) => {
+  const itemId = req.params.itemId;
+  if(!utils.isObjectId(itemId)) {
+    throw new HttpError.NotFoundError("The item is not exist");
+  }
+  next();
+};
 /**
  * @api {get} /items 获取符合条件的商品,可排序
  * @apiName 查询商品列表
@@ -40,12 +48,14 @@ itemController.newItem = (req, res, next) => {
   if (!body.name || !body.picture_url || !body.price) {
     throw new HttpError.BadRequestError();
   }
+
   const _item = new Item({
     name: body.name,
     picture_url: body.picture_url,
     price: body.price
   });
-  _item.save().then(item => {
+
+  Item.createNewItem(_item).then(item => {
     res.success(item, 201);
   }).catch(next);
 };
@@ -57,7 +67,10 @@ itemController.newItem = (req, res, next) => {
  */
 itemController.getItem = (req, res, next) => {
   const itemId = req.params.itemId;
-  Item.findById(itemId).then(item => {
+  Item.findItemById(itemId).then(item => {
+    if(!item) {
+      throw new HttpError.NotFoundError("The item is not exist");
+    }
     res.success(item, 200);
   }).catch(next);
 };
@@ -68,20 +81,20 @@ itemController.updateItem = (req, res, next) => {
     throw new HttpError.BadRequestError();
   }
   const itemId = req.params.itemId;
-  Item.findById(itemId).then(item => {
-    item.name = body.name;
-    item.picture_url = body.picture_url;
-    item.price = body.price;
-    item.save().then(item => {
+  const _item = {name: body.name, picture_url: body.picture_url, price: body.price};
+
+  Item.updateItemById(itemId, _item).then(item => {
       res.success(item, 201);
-    });
-  }).catch(next);
+    }).catch(next);
 };
 
 itemController.removeItem = (req, res, next) => {
     const itemId = req.params.itemId;
-    Item.remove({'_id': itemId}).then(() => {
-      res.success({}, 204);
-    })
+    if(!utils.isObjectId(itemId)) {
+      throw new HttpError.NotFoundError('The item is not found');
+    }
+    Item.removeItemById(itemId).then(() => {
+      res.success({a: 1}, 204);
+    }).catch(next);
 };
 module.exports = itemController;

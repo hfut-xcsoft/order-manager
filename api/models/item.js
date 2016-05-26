@@ -18,12 +18,29 @@ const ItemSchema = new Schema({
 ItemSchema.statics = {
   findItemsByQuery: function (query, opt) {
     return this.find(query, {}, opt).exec();
+  },
+  createNewItem: function(item) {
+    return item.save();
+  },
+  findItemById: function(itemId) {
+    return this.findById(itemId).exec();
+  },
+  updateItemById: function(itemId, _item) {
+    return this.findById(itemId).exec().then(item => {
+      if(!item) {
+        throw new HttpError.NotFoundError('The item is not exist');
+      }
+      item.name = _item.name;
+      item.picture_url = _item.picture_url;
+      item.price = _item.price;
+      item.save();
+    });
+  },
+  removeItemById: function(itemId) {
+    return this.remove({'_id': itemId}).exec();
   }
 };
 
 const Item = mongoose.model('Item', ItemSchema);
 
 module.exports = Item;
-
-
-
