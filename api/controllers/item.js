@@ -60,8 +60,6 @@ itemController.newItem = (req, res, next) => {
   }).catch(next);
 };
 
-
-
 /*
  * @Router: /items/:itemId
  */
@@ -81,7 +79,7 @@ itemController.updateItem = (req, res, next) => {
     throw new HttpError.BadRequestError();
   }
   const itemId = req.params.itemId;
-  Item.findItemById(itemId).then(item => {
+  Item.findItemById(itemId, true).then(item => {
     const _item = Object.assign(item, {
       name: body.name,
       picture_url: body.picture_url,

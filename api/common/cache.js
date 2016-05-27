@@ -83,15 +83,18 @@ cache.delMulti = (keyPattern) => {
 };
 
 // 若命中则从cache中返回结果,若不命中则从数据库查询后存如cache
-cache.getSet = function (key, promiseFunc) {
+cache.getSet = function (key, promiseFunc, disableCache) {
+  disableCache = disableCache || false;
   return new Promise((resolve, reject) => {
     cache.get(key).then(_value => {
-      if (_value) {
+      if (!disableCache && _value) {
         resolve(_value);
       } else {
         promiseFunc().then(value => {
           resolve(value);
-          cache.set(key, value, 60);
+          if (!disableCache) {
+            cache.set(key, value, 60);
+          }
         }).catch(reject);
       }
     })

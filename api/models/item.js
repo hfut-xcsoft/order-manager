@@ -30,10 +30,10 @@ ItemSchema.statics = {
     cache.delMulti('items:all:*');
     return item.save();
   },
-  findItemById: function(itemId) {
+  findItemById: function(itemId, disableCache) {
     return cache.getSet('items:id:' + itemId, () => {
       return this.findById(itemId).exec();
-    })
+    }, disableCache);
   },
   updateItem: function(item) {
     cache.del('items:id:' + item._id);
