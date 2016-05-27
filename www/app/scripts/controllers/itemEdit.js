@@ -1,6 +1,6 @@
-angular.module('app').controller('ItemNewController', function ($scope, $location, Item) {
+angular.module('app').controller('ItemEditController', function ($scope, $stateParams, $location, Item) {
   var vm = this;
-  vm.item = {};
+  vm.item = Item.get({id: $stateParams.id});
   new ss.SimpleUpload({
     button: 'picture_url', // Button id
     url: 'https://xcsoft.hfut.edu.cn/file_upload.php?app=queue',
@@ -24,7 +24,7 @@ angular.module('app').controller('ItemNewController', function ($scope, $locatio
       alert('请完整填写表单');
       return;
     }
-    Item.save(vm.item).$promise.then(function () {
+    Item.update({id: $stateParams.id}, vm.item).$promise.then(function () {
       $location.path('/items/list');
     });
   }

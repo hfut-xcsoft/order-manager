@@ -38,10 +38,17 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
   });
   $stateProvider.state('items.new', {
     url: '/new',
-    templateUrl: 'views/item/new.html',
+    templateUrl: 'views/item/edit.html',
     controller: 'ItemNewController',
     controllerAs: 'vm',
     title: "添加商品"
+  });
+  $stateProvider.state('items.edit', {
+    url: '/:id',
+    templateUrl: 'views/item/edit.html',
+    controller: 'ItemEditController',
+    controllerAs: 'vm',
+    title: '编辑商品'
   });
 
   $stateProvider.state('orders', {
