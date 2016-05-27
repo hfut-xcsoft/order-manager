@@ -8,7 +8,7 @@ router.route('/items')
   .post(itemController.newItem);
 
 router.route('/items/:itemId')
-  .all(itemController.errorHandling)
+  .all(itemController.assertExist)
   .get(itemController.getItem)
   .put(itemController.updateItem)
   .delete(itemController.removeItem);

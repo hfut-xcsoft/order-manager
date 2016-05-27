@@ -4,13 +4,10 @@ const utils = require('../common/utils');
 
 const itemController = {};
 
-itemController.errorHandling = (req, res, next) => {
-  const itemId = req.params.itemId;
-  if(!utils.isObjectId(itemId)) {
-    throw new HttpError.NotFoundError("The item is not exist");
-  }
-  next();
-};
+//////////////////////////////
+/* @Router: /items          */
+//////////////////////////////
+
 /**
  * @api {get} /items 获取符合条件的商品,可排序
  * @apiName 查询商品列表
@@ -60,8 +57,32 @@ itemController.newItem = (req, res, next) => {
   }).catch(next);
 };
 
-/*
- * @Router: /items/:itemId
+//////////////////////////////
+/* @Router: /items/:itemId  */
+//////////////////////////////
+
+/**
+ * 断言中间件
+ */
+itemController.assertExist = (req, res, next) => {
+  const itemId = req.params.itemId;
+  if (!utils.isObjectId(itemId)) {
+    throw new HttpError.BadRequestError('The item id is wrong');
+  }
+  Item.findItemById(itemId).then(item => {
+    if (!item) {
+      throw new HttpError.NotFoundError('The item is not exist');
+    }
+    next();
+  }).catch(next);
+};
+
+/**
+ * @api {get} /items/:itemId 通过itemId获取商品信息
+ * @apiName 获取商品信息
+ * @apiGroup 商品
+ *
+ * @apiParam {String} itemId
  */
 itemController.getItem = (req, res, next) => {
   const itemId = req.params.itemId;
@@ -73,6 +94,17 @@ itemController.getItem = (req, res, next) => {
   }).catch(next);
 };
 
+/**
+ * @api {put} /items/:itemId 更新商品信息
+ * @apiName 更新商品信息
+ * @apiGroup 商品
+ *
+ * @apiParam {String} itemId
+ * @apiParam {String} name
+ * @apiParam {String} picture_url
+ * @apiParam {String} price
+ * @apiSuccess (201)
+ */
 itemController.updateItem = (req, res, next) => {
   const body = req.body;
   if(!body.name || !body.picture_url || !body.price) {
@@ -91,6 +123,14 @@ itemController.updateItem = (req, res, next) => {
   }).catch(next);
 };
 
+/**
+ * @api {delete} /items/:itemId 通过itemId删除商品信息
+ * @apiName 删除商品
+ * @apiGroup 商品
+ *
+ * @apiParam {String} itemId
+ * @apiSuccess (204)
+ */
 itemController.removeItem = (req, res, next) => {
     const itemId = req.params.itemId;
     if(!utils.isObjectId(itemId)) {
