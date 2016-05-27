@@ -81,11 +81,16 @@ itemController.updateItem = (req, res, next) => {
     throw new HttpError.BadRequestError();
   }
   const itemId = req.params.itemId;
-  const _item = {name: body.name, picture_url: body.picture_url, price: body.price};
-
-  Item.updateItemById(itemId, _item).then(item => {
-      res.success(item, 201);
-    }).catch(next);
+  Item.findItemById(itemId).then(item => {
+    const _item = Object.assign(item, {
+      name: body.name,
+      picture_url: body.picture_url,
+      price: body.price
+    });
+    return Item.updateItem(_item);
+  }).then(item => {
+    res.success(item, 201)
+  }).catch(next);
 };
 
 itemController.removeItem = (req, res, next) => {
