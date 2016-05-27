@@ -7,6 +7,7 @@ const controllers = require('./controllers');
 const middlewares = require('./middlewares');
 const HttpError = require('./common/http-error');
 
+app.use(middlewares.CORSMiddleware);
 app.use(middlewares.response);
 app.listen(config.port);
 app.use(bodyParser.json());
