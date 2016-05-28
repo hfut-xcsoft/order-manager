@@ -3,17 +3,22 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const OrderSchema = new Schema({
-  number: Number,
-  status: Number,
-  items: [{}],
-  total_price: Number,
-  created_at: {type: Date, default: Date.now},
-  updated_at: {type: Date, default: Date.now},
-  finished_at: Date,
+  number: { type: Number },
+  status: { type: Number, default: 0 },
+  items: { type: Array },
+  total_price: { type: Number },
+  created_at: { type: Date, default: Date.now},
+  updated_at: { type: Date, default: Date.now},
+  finished_at: { type:Date },
   __v: {type: Number, select: false}
 });
 
-OrderSchema.ststics = {
+OrderSchema.pre('save', function (next) {
+  this.updated_at = Date.now();
+  next();
+});
+
+OrderSchema.statics = {
   findOrdersByQuery: function(query, opt) {
     return this.find(query, {}, opt).exec();
   },
@@ -23,20 +28,15 @@ OrderSchema.ststics = {
   findOrderById: function(orderId) {
     return this.findById(orderId).exec();
   },
-  updateOderById: function(orderId, _order) {
-    return this.findById(orderId).then(order => {
-      order.status = _order.status;
-      const items = _order.items;
-      order.items = [];
-      for(item in items) {
-        order.items.push(item);
-      }
-      order.save();
-    })
+  updateOrder: function(order) {
+    return order.save();
+  },
+  updateOrderItems: function (orderId, items) {
+    return this.update({_id: orderId}, {$set: {items: items}})
   },
   removeOrderById: function(orderId) {
-    reutrn this.remove({'_id': orderId}).exec();
-  },
+    return this.remove({'_id': orderId}).exec();
+  }
   
 };
 
