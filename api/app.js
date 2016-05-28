@@ -21,4 +21,3 @@ if ('development' == process.env.NODE_ENV) {
 }
 console.log('APP started on  port ' + config.port);
 module.exports = app;
-
