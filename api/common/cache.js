@@ -20,7 +20,7 @@ cache.get = (key, callback) => {
         resolve();
       } else {
         result = JSON.parse(result);
-        console.log('[Redis]', 'Cache hitting in', new Date() - timeBegin, 'ms');
+        console.log('[Redis]', 'Cache hitting', key, 'in', new Date() - timeBegin, 'ms');
         resolve(result);
       }
       if (callback) callback(err, result);
@@ -43,7 +43,7 @@ cache.set = (key, value, time, callback) => {
           return resolve();
         }
         resolve(res);
-        console.log('[Redis]', 'Save cache in', new Date() - timeBegin, 'ms');
+        console.log('[Redis]', 'Save cache', key, 'in', new Date() - timeBegin, 'ms');
         if (callback) callback(err, res);
       });
     } else {
@@ -52,7 +52,7 @@ cache.set = (key, value, time, callback) => {
           return resolve();
         }
         resolve(res);
-        console.log('[Redis]', 'Save cache in', new Date() - timeBegin, 'ms');
+        console.log('[Redis]', 'Save cache', key, 'in', new Date() - timeBegin, 'ms');
         if (callback) callback(err, res);
       });
     }
