@@ -7,7 +7,7 @@ const utils = require('../common/utils.js');
 const orderController = {};
 
 //////////////////////////////
-/* @Router: /orders          */
+/* @Router: /orders         */
 //////////////////////////////
 
 /**
@@ -104,7 +104,7 @@ orderController.updateOrder = (req, res, next) => {
   const orderId = req.params.orderId;
   let _order;
 
-  Order.findOrderById(orderId).then(order => {
+  Order.findOrderById(orderId, true).then(order => {
     const itemIds = req.body.items || order.items.map(item => item._id);
     const status = req.body.status || order.status;
     if (itemIds.length == 0) {
@@ -167,15 +167,15 @@ orderController.updateItemStatus = (req, res, next) => {
   if (typeof status === 'undefined') {
     throw new HttpError.BadRequestError('未传入status')
   }
-  Order.findOrderById(orderId).then(order => {
+  Order.findOrderById(orderId, true).then(order => {
     const items = Object.assign([], order.items);
-    items.forEach((item, i) => {
+    items.forEach(item => {
       if (item._id == itemId) {
         item.status = item.status || 0;
         if (status < item.status || status > item.status + 1) {
           throw new HttpError.ForbiddenError('状态转移错误');
         }
-        items[i].status = status;
+        item.status = status;
       }
     });
     return Order.updateOrderItems(order._id, items);
