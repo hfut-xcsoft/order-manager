@@ -6,12 +6,12 @@ angular.module('app').directive('orderActionButton', function ($compile) {
       var status = scope.$eval(attrs.orderActionButton);
       switch (status) {
         case 0:
-          btns = $compile('<button class="btn btn-red">取消</button> <a href="#/orders/{{order._id}}" class="btn btn-yellow">修改</a>')(scope);
+          btns = $compile('<button ng-click="vm.deleteOrder($index)" class="btn btn-red">取消</button> <a href="#/orders/{{order._id}}" class="btn btn-yellow">修改</a>')(scope);
           element.append(btns);
           break;
         case 1:
         case 2:
-          btns = $compile('<div><button ng-click="scope.finish(order._id)" class="btn btn-green">完成</button>')(scope);
+          btns = $compile('<button ng-click="vm.updateState($index)" class="btn btn-green">完成</button>')(scope);
           element.append(btns);
           break;
       }
