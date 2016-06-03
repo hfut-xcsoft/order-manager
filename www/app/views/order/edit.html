@@ -4,65 +4,30 @@
       <li>订单管理</li>
       <li>新订单</li>
     </ul>
-    <button class="btn btn-yellow ml-20">取消</button>
+    <a href="#/orders/current" class="btn btn-yellow ml-20">取消</a>
   </div>
   <div class="mg-20"></div>
-  <div class="card">
+  <div class="card" id="chosen">
     <ul class="chosen-list">
-      <li><img src="./images/food.jpg"> </li>
-      <li><img src="./images/food.jpg"> </li>
+      <li ng-repeat="item in vm.chosenItems track by $index">
+        <img ng-src="{{item.picture_url}}" ng-click="vm.unchooseItem($index)">
+      </li>
     </ul>
     <div class="chosen-option">
-      <span>总计</span>
-      <span>¥5.00</span>
-      <button chart="btn btn-green">立即下单</button>
+      <span id="chosen-total">总计</span>
+      <span id="chosen-price">{{vm.totalPrice | rmb}}</span>
+      <button ng-click="vm.submitOrder()" class="btn btn-green">立即下单</button>
     </div>
   </div>
   <div class="mg-20"></div>
   <div class="item-list">
-    <div class="card">
+    <div class="card" ng-repeat="item in vm.allItems" ng-click="vm.chooseItem(item)">
       <div class="img-container">
-        <img src="./images/food.jpg">
+        <img ng-src="{{item.picture_url}}">
       </div>
       <div>
-        <span class="item-name">番茄炒蛋</span>
-        <span class="item-price">¥6.00</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="img-container">
-        <img src="./images/food.jpg">
-      </div>
-      <div>
-        <span class="item-name">番茄炒蛋</span>
-        <span class="item-price">¥6.00</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="img-container">
-        <img src="./images/food.jpg">
-      </div>
-      <div>
-        <span class="item-name">番茄炒蛋</span>
-        <span class="item-price">¥6.00</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="img-container">
-        <img src="./images/food.jpg">
-      </div>
-      <div>
-        <span class="item-name">番茄炒蛋</span>
-        <span class="item-price">¥6.00</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="img-container">
-        <img src="./images/food.jpg">
-      </div>
-      <div>
-        <span class="item-name">番茄炒蛋</span>
-        <span class="item-price">¥6.00</span>
+        <span class="item-name">{{item.name}}</span>
+        <span class="item-price">{{item.price | rmb}}</span>
       </div>
     </div>
   </div>

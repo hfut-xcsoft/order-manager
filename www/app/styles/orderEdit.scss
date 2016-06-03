@@ -1,7 +1,19 @@
 #order-edit {
+  #chosen {
+    display: flex;
+  }
   .chosen-list {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    display: flex;
+    flex: 1;
+    flex-wrap: nowrap;
     > li {
+      cursor: pointer;
+      margin: 0 10px;
       display: inline-block;
+
       > img {
         height: 100px;
         width: 160px;
@@ -9,13 +21,35 @@
     }
   }
   .chosen-option {
-    float:right;
+    padding: 0 10px;
+    text-align: center;
+    flex-basis: 200px;
+    box-sizing: border-box;
+    width: 10%;
+
+    > span {
+      display: block;
+      margin: 5px 0;
+    }
+
+    #chosen-total {
+      font-size: 16px;
+    }
+    #chosen-price {
+      font-size: 20px;
+      margin: 10px 0;
+      color: red;
+    }
   }
 
   .item-list {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 
     > .card {
+      cursor: pointer;
+      margin: 20px 10px;
       .img-container {
         overflow: hidden;
         max-height: 150px;
