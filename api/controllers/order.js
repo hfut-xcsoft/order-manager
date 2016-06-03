@@ -18,10 +18,20 @@ const orderController = {};
  * @apiParam sort {String} 排序字段,逗号分隔,-号代表降序排列
  */
 orderController.getOrders = (req, res, next) => {
-    const opt = {};
-    Order.findOrdersByQuery({}, opt).then(order => {
-      res.success(order);
-    }).catch(next);
+  const statusArr = req.query.status && status.split(',') || [0,1,2,3,4];
+  const sortObj = {};
+  if (req.query.sort) {
+    const sortParams = req.query.sort.split(',');
+    sortParams.forEach(sortParam => {
+      const field = sortParam.match(/\w+/)[0];
+      const order = sortParam[0] === '-' ? -1 : 1;
+      sortObj[field] = order;
+    });
+  }
+  const opt = {sort: sortObj};
+  Order.findOrdersByQuery({status: {$in: statusArr}}, opt).then(order => {
+    res.success(order);
+  }).catch(next);
 };
 
 /**
@@ -33,22 +43,35 @@ orderController.getOrders = (req, res, next) => {
  */
 orderController.newOrder = (req, res, next) => {
   const itemIds = req.body.items;
+  if (itemIds.length === 0) {
+    throw new HttpError.BadRequestError("无效订单");
+  }
+
+  const items = {};
+
+  req.body.items.forEach(itemId => {
+    items[itemId] = items[itemId] + 1 || 1;
+  });
 
   Promise.all([
     Item.findItemsByQuery({_id: {$in: itemIds}}),
-    Order.findOrdersByQuery({}, {sort: {_id: -1}, limit: 1})
+    Order.findOrdersByQuery({}, {sort: {_id: -1}, limit: 1}),
+    Order.findOrdersByQuery({status: 1})
   ]).then(results => {
     let totalPrice = 0;
     results[0].forEach(item => {
       item.status = 0;
-      totalPrice += item.price;
+      item.count = items[item._id] || 0;
+      totalPrice += item.price * item.count;
     });
     const lastOrder = results[1][0];
     const lastNumber = lastOrder ? lastOrder.number : 0;
+    const productingOrderNum = results[2].length;
     const _order = new Order({
       number: lastNumber == 100 ? 1 : lastNumber + 1,
       items: results[0],
-      total_price: totalPrice
+      total_price: totalPrice,
+      status: productingOrderNum < 3 ? 1 : 0
     });
     return Order.createNewOrder(_order);
   }).then(order => {
@@ -92,21 +115,34 @@ orderController.getOrder = (req, res, next) => {
 
 
 /**
- * @api {put} /items/:itemId 更新商品信息
- * @apiName 更新商品信息
- * @apiGroup 商品
+ * @api {put} /orders/:orderId 更新订单信息
+ * @apiName 更新订单信息
+ * @apiGroup 订单
  *
- * @apiParam {String} itemId
+ * @apiParam {String} orderId
  * @apiParam {Number} status
  * @apiSuccess (201)
  */
 orderController.updateOrder = (req, res, next) => {
   const orderId = req.params.orderId;
   let _order;
+  const _items = {};
 
   Order.findOrderById(orderId, true).then(order => {
-    const itemIds = req.body.items || order.items.map(item => item._id);
+    //const itemIds = req.body.items || order.items.map(item => item._id);
+    let itemIds = {};
     const status = req.body.status || order.status;
+    if (req.body.items) {
+      itemIds = req.body.items;
+      req.body.items.forEach(itemId => {
+        _items[itemId] = _items[itemId] + 1 || 1;
+      });
+    } else {
+      itemIds = order.items.map(item => {
+        _items[item._id] = item.count;
+        return item._id
+      })
+    }
     if (itemIds.length == 0) {
       throw new HttpError.BadRequestError();
     }
@@ -118,12 +154,19 @@ orderController.updateOrder = (req, res, next) => {
     return Item.findItemsByQuery({_id: {$in: itemIds}})
   }).then(items => {
     let totalPrice = 0;
+    if (items.length === 0) {
+      throw new HttpError.BadRequestError("无效订单");
+    }
     items.forEach(item => {
       item.status = 0;
-      totalPrice += item.price;
+      item.count = _items[item._id];
+      totalPrice += item.price * item.count;
     });
     _order.items = items;
     _order.total_price = totalPrice;
+    if (req.body.status == 2 && _order.status != 2) {
+      _order.finished_at = Date.now();
+    }
     return Order.updateOrder(_order);
   }).then(order => {
       res.success(order, 201);
@@ -180,8 +223,20 @@ orderController.updateItemStatus = (req, res, next) => {
     });
     return Order.updateOrderItems(order._id, items);
   }).then(() => {
-    return Order.findOrderById(orderId)
+    return Order.findOrderById(orderId, false)
   }) .then(order => {
+    let isUnfinished = false;
+    order.items.forEach(item => {
+      if (item.status != 2) {
+        isUnfinished = true
+      }
+    });
+    if (!isUnfinished) {
+      order.status = 2;
+      return Order.updateOrder(order)
+    }
+    return Order;
+  }).then(order => {
     res.success(order, 201);
   }).catch(next);
 };
