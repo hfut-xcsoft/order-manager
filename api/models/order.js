@@ -43,6 +43,25 @@ OrderSchema.statics = {
     cache.delMulti(`orders:query:*`);
     return this.update({_id: orderId}, {$set: {items: items, updated_at: Date.now()}}).exec();
   },
+  updateOtherState: function () {
+    cache.delMulti(`orders:*`);
+    var self = this;
+    return this.find({status: 1}).count().exec().then(count => {
+      console.log(count);
+      if (count == 3) {
+        return false;
+      }
+      return self.find({status: 0}, {_id: 1}, {sort: {_id: 1}, limit: 3 - count}).exec();
+    }).then(waitingOrder => {
+      if (!waitingOrder) {
+        return false;
+      }
+      var ids = waitingOrder.map(order => order._id);
+      console.log(ids);
+      return self.update({_id: {$in: ids}}, {status: 1}).exec()
+    });
+
+  },
   removeOrderById: function(orderId) {
     cache.del(`orders:id:${orderId}`);
     cache.delMulti(`orders:query:*`);

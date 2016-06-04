@@ -18,7 +18,7 @@ const orderController = {};
  * @apiParam sort {String} 排序字段,逗号分隔,-号代表降序排列
  */
 orderController.getOrders = (req, res, next) => {
-  const statusArr = req.query.status && status.split(',') || [0,1,2,3,4];
+  const statusArr = req.query.status && req.query.status.split(',') || [0,1,2,3,4];
   const sortObj = {};
   if (req.query.sort) {
     const sortParams = req.query.sort.split(',');
@@ -169,7 +169,10 @@ orderController.updateOrder = (req, res, next) => {
     }
     return Order.updateOrder(_order);
   }).then(order => {
-      res.success(order, 201);
+    _order = order;
+    return Order.updateOtherState();
+  }).then(() => {
+    res.success(_order, 201);
   }).catch(next);
 };
 
