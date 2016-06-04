@@ -164,7 +164,7 @@ orderController.updateOrder = (req, res, next) => {
     });
     _order.items = items;
     _order.total_price = totalPrice;
-    if (req.body.status == 2 && _order.status != 2) {
+    if (req.body.status == 2) {
       _order.finished_at = Date.now();
     }
     return Order.updateOrder(_order);
@@ -237,6 +237,7 @@ orderController.updateItemStatus = (req, res, next) => {
     });
     if (!isUnfinished) {
       order.status = 2;
+      order.finished_at = Date.now();
       return Order.updateOrder(order)
     }
     return Order;
