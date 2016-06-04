@@ -210,6 +210,7 @@ orderController.updateItemStatus = (req, res, next) => {
   const orderId = req.params.orderId;
   const itemId = req.params.itemId;
   const status = req.body.status;
+  let _order;
   if (typeof status === 'undefined') {
     throw new HttpError.BadRequestError('未传入status')
   }
@@ -240,7 +241,10 @@ orderController.updateItemStatus = (req, res, next) => {
     }
     return Order;
   }).then(order => {
-    res.success(order, 201);
+    _order = order;
+    return Order.updateOtherState();
+  }).then(() => {
+    res.success(_order, 201);
   }).catch(next);
 };
 
