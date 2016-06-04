@@ -47,7 +47,6 @@ OrderSchema.statics = {
     cache.delMulti(`orders:*`);
     var self = this;
     return this.find({status: 1}).count().exec().then(count => {
-      console.log(count);
       if (count == 3) {
         return false;
       }
@@ -57,7 +56,6 @@ OrderSchema.statics = {
         return false;
       }
       var ids = waitingOrder.map(order => order._id);
-      console.log(ids);
       return self.update({_id: {$in: ids}}, {status: 1}).exec()
     });
 
