@@ -3,14 +3,16 @@ angular.module('app').directive('productActionButton', function ($compile) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
-      var status = scope.$eval(attrs.productActionButton);
+      var item = scope.$eval(attrs.productActionButton);
+      var order = scope.$eval(attrs.productOrder);
+      var status = item.status;
       var btn;
       switch (status) {
         case 0:
-          btn = '<button class="btn btn-blue">生产</button>';
+          btn = '<button ng-click="vm.updateState(order._id, item._id, item.status+1)" class="btn btn-blue">生产</button>';
           break;
         case 1:
-          btn = '<button class="btn btn-green">完成</button>';
+          btn = '<button ng-click="vm.updateState(order._id, item._id, item.status+1)" class="btn btn-green">完成</button>';
       }
       if (btn) {
         element.append($compile(btn)(scope));
