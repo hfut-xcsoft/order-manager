@@ -40,6 +40,10 @@ ItemSchema.statics = {
     cache.delMulti('items:all:*');
     return item.save();
   },
+  addItemSaleCount: function (itemId, count) {
+    cache.delMulti('items:*');
+    return this.update({_id: itemId}, {$inc: {sales_count: count}}).exec()
+  },
   removeItemById: function(itemId) {
     cache.del('items:id:' + itemId);
     cache.delMulti('items:all:*');

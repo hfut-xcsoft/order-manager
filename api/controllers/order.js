@@ -164,8 +164,15 @@ orderController.updateOrder = (req, res, next) => {
     });
     _order.items = items;
     _order.total_price = totalPrice;
+    // 如果已完成生产
     if (req.body.status == 2) {
       _order.finished_at = Date.now();
+    }
+    // 如果已完成订单
+    if (req.body.status == 3) {
+      items.forEach(item => {
+        Item.addItemSaleCount(item._id, item.count);
+      });
     }
     return Order.updateOrder(_order);
   }).then(order => {
