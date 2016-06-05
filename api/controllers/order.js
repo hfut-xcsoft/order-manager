@@ -1,6 +1,7 @@
 'use strict';
 const Order = require('../models').Order;
 const Item = require('../models').Item;
+const Statistic = require('../models').Statistic;
 const HttpError = require('../common/http-error');
 const utils = require('../common/utils.js');
 
@@ -173,6 +174,8 @@ orderController.updateOrder = (req, res, next) => {
       items.forEach(item => {
         Item.addItemSaleCount(item._id, item.count);
       });
+      var count = items.map(item => item.count).reduce((a,b) => a + b);
+      Statistic.addData(count, totalPrice);
     }
     return Order.updateOrder(_order);
   }).then(order => {

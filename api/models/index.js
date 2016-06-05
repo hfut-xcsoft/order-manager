@@ -6,4 +6,4 @@ if ('production' !== process.env.NODE_ENV) {
 }
 exports.Item = require('./item');
 exports.Order = require('./order');
-//exports.Static = require('./Statistic');
+exports.Statistic = require('./Statistic');
