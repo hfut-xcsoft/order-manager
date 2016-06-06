@@ -12,11 +12,10 @@ const RANGE_MONTH = 2;
 const RANGE_WEEK  = 3;
 const RANGE_DAY   = 4;
 
-
 const VIEW_PREVIOUS = 0;
 const VIEW_CURRENT  = 1;
 
-
+moment.locale('zh-cn');
 statisticController.getStatisticData = (req, res, next) => {
   const range = Number.parseInt(req.query.range) || RANGE_ALL;
   const view =  Number.parseInt(req.query.view)  || VIEW_PREVIOUS;
@@ -42,7 +41,7 @@ statisticController.getStatisticData = (req, res, next) => {
         queryDate.start = moment(date).subtract(1, 'weeks').format('YYYY-MM-DD');
         break;
       case RANGE_DAY:
-        queryDate.start = moment(date).substract(1, 'days').format('YYYY-MM-DD');
+        queryDate.start = moment(date).format('YYYY-MM-DD');
         break;
       default:
         throw new HttpError.BadRequestError('range类型错误');
