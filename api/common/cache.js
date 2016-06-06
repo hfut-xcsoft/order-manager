@@ -17,6 +17,7 @@ cache.get = (key, callback) => {
   return new Promise((resolve, reject) => {
     redis.get(key, (err, result) => {
       if (!result) {
+        console.log('[Redis]', 'Not Cached', key);
         resolve();
       } else {
         result = JSON.parse(result);
@@ -30,7 +31,6 @@ cache.get = (key, callback) => {
 
 // 存入cache
 cache.set = (key, value, time, callback) => {
-  var timeBegin = new Date();
   value = JSON.stringify(value);
   return new Promise((resolve, reject) => {
     if (typeof time === 'function') {
@@ -43,7 +43,6 @@ cache.set = (key, value, time, callback) => {
           return resolve();
         }
         resolve(res);
-        console.log('[Redis]', 'Save cache', key, 'in', new Date() - timeBegin, 'ms');
         if (callback) callback(err, res);
       });
     } else {
@@ -52,7 +51,6 @@ cache.set = (key, value, time, callback) => {
           return resolve();
         }
         resolve(res);
-        console.log('[Redis]', 'Save cache', key, 'in', new Date() - timeBegin, 'ms');
         if (callback) callback(err, res);
       });
     }
