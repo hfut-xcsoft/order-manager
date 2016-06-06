@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const cache = require('../common/cache');
 const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
+const moment = require('moment');
 
 function getDateString(date) {
   if (! (date instanceof Date)) {
@@ -9,22 +11,33 @@ function getDateString(date) {
   return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 }
 
+function mapStringToDate(dateStr) {
+  return new Date(getDateString(dateStr)).getTime() + 28800000;
+}
+
 const StatisticSchema = new Schema({
-  date: { type: String },
+  _id: { type: ObjectId, select: false },
+  datetime: { type: Date },
   day_of_week: { type: Number, default: new Date().getDay() },
   count: { type: Number, default: 0 },
   total_price: { type: Number, default: 0 },
-  __v: { select: 0 }
+  __v: { type: Number, select: false }
 });
+
+StatisticSchema.virtual('date')
+  .get(function() { return getDateString(this.datetime)})
+  .set(function(date) {
+    this.set('datetime', mapStringToDate(date))
+  });
 
 StatisticSchema.statics = {
   addData: function (count, price) {
     var today = getDateString(Date.now());
-    cache.del('statistic:date:' + today).then(() => {
-      return this.find({date: today}).count().exec();
-    }).then(num => {
+    var datetime = mapStringToDate(today);
+    cache.delMulti('statistics:*');
+    return this.find({datetime: datetime}).count().exec().then(num => {
       if (num) {
-        return this.update({date: today}, {$inc: {count: count, total_price: price}}).exec();
+        return this.update({datetime: datetime}, {$inc: {count: count, total_price: price}}).exec();
       }
       var newStatistic = new Statistic({
         date: today,
@@ -32,6 +45,18 @@ StatisticSchema.statics = {
         total_price: price
       });
       return newStatistic.save();
+    });
+  },
+  findStatisticsBetween: function (start, end) {
+    return cache.getSet(`statistics:${start}:${end}`, () => {
+      return this.find({datetime: {$gte: start, $lte: end}}).exec().then(statistics => {
+        return statistics.map(statistic => {
+          var obj = statistic.toObject();
+          obj.date = statistic.date;
+          delete obj.datetime;
+          return obj;
+        });
+      });
     });
   }
 };

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const itemController = require('./item');
 const orderController = require('./order');
-//const statisticController = require('./statistic');
+const statisticController = require('./statistic');
 
 router.route('/items')
   .get(itemController.getItems)
@@ -28,13 +28,7 @@ router.route('/orders/:orderId/items/:itemId')
   .all(orderController.assertOrderExist, itemController.assertExist)
   .put(orderController.updateItemStatus);
 
-/*router.route('/statistics')
+router.route('/statistics')
   .get(statisticController.getStatisticData);
-  */
-
-router.all(() => {
-  throw new HttpError.NotFoundError();
-});
-
 
 module.exports = router;
