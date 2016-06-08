@@ -1,6 +1,6 @@
 'use strict';
 const Statistic = require('../models').Statistic;
-const HttpError = require('../common/http-error');
+const HttpError = require('some-http-error');
 const moment = require('moment');
 const R = require('ramda');
 

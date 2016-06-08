@@ -23,6 +23,7 @@
     "ioredis": "^1.15.1",
     "moment": "^2.13.0",
     "mongoose": "^4.4.17",
-    "ramda": "^0.21.0"
+    "ramda": "^0.21.0",
+    "some-http-error": "0.0.2"
   }
 }

@@ -2,7 +2,7 @@
 const Order = require('../models').Order;
 const Item = require('../models').Item;
 const Statistic = require('../models').Statistic;
-const HttpError = require('../common/http-error');
+const HttpError = require('some-http-error');
 const utils = require('../common/utils.js');
 
 const orderController = {};
