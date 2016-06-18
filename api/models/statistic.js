@@ -16,7 +16,6 @@ function mapStringToDate(dateStr) {
 }
 
 const StatisticSchema = new Schema({
-  _id: { type: ObjectId, select: false },
   datetime: { type: Date },
   day_of_week: { type: Number, default: new Date().getDay() },
   count: { type: Number, default: 0 },
@@ -54,6 +53,7 @@ StatisticSchema.statics = {
           var obj = statistic.toObject();
           obj.date = statistic.date;
           delete obj.datetime;
+          delete obj._id;
           return obj;
         });
       });
