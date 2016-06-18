@@ -130,7 +130,6 @@ orderController.updateOrder = (req, res, next) => {
   const _items = {};
 
   Order.findOrderById(orderId, true).then(order => {
-    //const itemIds = req.body.items || order.items.map(item => item._id);
     let itemIds = {};
     const status = req.body.status || order.status;
     if (req.body.items) {
@@ -144,7 +143,7 @@ orderController.updateOrder = (req, res, next) => {
         return item._id
       })
     }
-    if (itemIds.length == 0) {
+    if (!itemIds || itemIds.length == 0) {
       throw new HttpError.BadRequestError();
     }
     if (status < order.status || status > order.status + 1) {
@@ -204,6 +203,26 @@ orderController.removeOrder = (req, res, next) => {
 ////////////////////////////////////////////
 /* @Router: /orders/orderId/items/:itemId */
 ////////////////////////////////////////////
+
+orderController.assertOrderItemExisted = (req, res, next) => {
+  const orderId = req.params.orderId;
+  const itemId = req.params.itemId;
+  if(!utils.isObjectId(orderId)) {
+    throw new HttpError.BadRequestError('The order is wrong');
+  }
+  if(!utils.isObjectId(itemId)) {
+    throw new HttpError.BadRequestError('The item is wrong');
+  }
+  Order.findOrderById(orderId).then(order => {
+    if(!order) {
+      throw new HttpError.NotFoundError('The order is not exist');
+    }
+    if (order.items.filter(item => item._id === itemId).length === 0) {
+      throw new HttpError.NotFoundError('The item is not exist in this order');
+    }
+    next();
+  }).catch(next);
+};
 
 /**
  * @api {put} /orders/orderId/items/:itemId 通过orderId与itemId修改订单商品信息
