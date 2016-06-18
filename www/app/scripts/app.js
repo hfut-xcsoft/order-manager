@@ -24,54 +24,54 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
     controller: 'MainCtrl'
   });
 
-  $stateProvider.state('items', {
-    url: '/items',
-    template: '<div ui-view></div>',
-    abstract: true
-  });
-  $stateProvider.state('items.list', {
-    url: '/list',
+  //$stateProvider.state('items', {
+  //  url: '/items',
+  //  template: '<div ui-view></div>',
+  //  abstract: true
+  //});
+  $stateProvider.state('itemsList', {
+    url: '/items/list',
     templateUrl: 'views/item/list.html',
     controller: 'ItemListController',
     controllerAs: 'vm',
     title: "商品列表"
   });
-  $stateProvider.state('items.new', {
-    url: '/new',
+  $stateProvider.state('itemsNew', {
+    url: '/items/new',
     templateUrl: 'views/item/edit.html',
     controller: 'ItemNewController',
     controllerAs: 'vm',
     title: "添加商品"
   });
-  $stateProvider.state('items.edit', {
-    url: '/:id',
+  $stateProvider.state('itemsEdit', {
+    url: '/items/:id',
     templateUrl: 'views/item/edit.html',
     controller: 'ItemEditController',
     controllerAs: 'vm',
     title: '编辑商品'
   });
 
-  $stateProvider.state('orders', {
-    url: '/orders',
-    template: '<div ui-view></div>',
-    abstract: true
-  });
-  $stateProvider.state('orders.current', {
-    url: '/current',
+  //$stateProvider.state('orders', {
+  //  url: '/orders',
+  //  template: '<div ui-view></div>',
+  //  abstract: true
+  //});
+  $stateProvider.state('ordersCurrent', {
+    url: '/orders/current',
     templateUrl: 'views/order/current.html',
     controller: 'OrderListCurrentController',
     controllerAs: 'vm',
     title: '当前订单'
   });
-  $stateProvider.state('orders.finished', {
-    url: '/finished',
+  $stateProvider.state('ordersFinished', {
+    url: '/orders/finished',
     templateUrl: 'views/order/finished.html',
     controller: 'OrderListFinishedController',
     controllerAs: 'vm',
     title: '已完成订单'
   });
-  $stateProvider.state('orders.new', {
-    url: '/new',
+  $stateProvider.state('ordersNew', {
+    url: '/orders/new',
     templateUrl: 'views/order/edit.html',
     controller: 'OrderNewController',
     controllerAs: 'vm',

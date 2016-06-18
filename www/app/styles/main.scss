@@ -295,24 +295,27 @@ a.btn {
     box-sizing: border-box;
     padding: 15px;
     width: 100%;
-  }
-  .ng-enter, .ng-leave {
-    position: absolute;
-    transition:all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    &.ng-enter {
+      position: absolute;
+      transition:all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    &.ng-enter {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    &.ng-enter-active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    &.ng-leave {
+      display: none;
+    }
   }
 
-  .ng-enter {
-    transform: translateY(10px);
-    opacity: 0;
-  }
 
-  .ng-enter-active {
-    transform: translateY(0);
-    opacity: 1;
-  }
 
-  .ng-leave {
-    display: none;
-  }
 }
 
