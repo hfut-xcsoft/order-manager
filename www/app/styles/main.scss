@@ -294,14 +294,12 @@ a.btn {
   > [ui-view] {
     box-sizing: border-box;
     padding: 15px;
-    width: 100%;
+    //width: 100%;
 
     &.ng-enter {
+      width: 100%;
       position: absolute;
       transition:all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-    }
-
-    &.ng-enter {
       transform: translateY(10px);
       opacity: 0;
     }
