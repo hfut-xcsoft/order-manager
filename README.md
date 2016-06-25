@@ -1,7 +1,7 @@
-# queuing-manager
+# order-manager
 通过Node实现的订单排号管理系统
 
-![Screen shot](https://raw.githubusercontent.com/hfut-xcsoft/queuing-manager/master/order-manager.png)
+![Screen shot](https://raw.githubusercontent.com/hfut-xcsoft/order-manager/master/order-manager.png)
 
 ## Features
 
@@ -41,6 +41,6 @@ $ npm start
 
 ## License
 
-[GPL V3](https://github.com/hfut-xcsoft/queuing-manager/blob/master/LICENSE)
+[GPL V3](https://github.com/hfut-xcsoft/order-manager/blob/master/LICENSE)
 
 
